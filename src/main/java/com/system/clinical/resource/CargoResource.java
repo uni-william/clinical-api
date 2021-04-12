@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.system.clinical.model.Cargo;
+import com.system.clinical.model.input.CargoInput;
 import com.system.clinical.repository.CargoRepository;
 import com.system.clinical.service.CargoService;
 
@@ -52,7 +53,7 @@ public class CargoResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Cargo> novo(@Valid @RequestBody Cargo cargo, HttpServletResponse response) {
+	public ResponseEntity<Cargo> novo(@Valid @RequestBody CargoInput cargo, HttpServletResponse response) {
 		Cargo cargoSalvo = cargoService.salvar(cargo);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(cargoSalvo.getId())
 				.toUri();
@@ -69,7 +70,7 @@ public class CargoResource {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Cargo> atualizar(@PathVariable Long id, @Valid @RequestBody Cargo cargo) {
+	public ResponseEntity<Cargo> atualizar(@PathVariable Long id, @Valid @RequestBody CargoInput cargo) {
 		Cargo cargoSalvo = cargoService.atualizar(id, cargo);
 		return ResponseEntity.ok(cargoSalvo);
 	}	

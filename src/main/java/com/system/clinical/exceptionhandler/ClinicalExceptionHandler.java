@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.system.clinical.service.exception.NegocioException;
+
 @ControllerAdvice
 public class ClinicalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -32,7 +34,7 @@ public class ClinicalExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
 		String mensagemUsuario = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = ex.getCause().toString();
+		String mensagemDesenvolvedor = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 
@@ -66,6 +68,16 @@ public class ClinicalExceptionHandler extends ResponseEntityExceptionHandler {
 		String mensagemDev = ex.toString();
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+
+	}
+	
+	@ExceptionHandler({ NegocioException.class })
+	public ResponseEntity<Object> negociosException(NegocioException ex, WebRequest request) {
+		
+		String mensagemUsuario = ex.getMessage();
+		String mensagemDev = ex.getMessage();
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDev));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 
 	}
 

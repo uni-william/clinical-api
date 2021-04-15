@@ -26,12 +26,12 @@ public class CargoService {
 	
 	public Cargo atualizar(Long id, CargoInput cargoInput) {
 		Cargo cargo = toEntity(cargoInput);
-		Cargo cargoSalvo = buscarEmpresaPeloId(id);
+		Cargo cargoSalvo = buscarCargoPeloId(id);
 		BeanUtils.copyProperties(cargo, cargoSalvo, "id");
 		return cargoRepository.save(cargoSalvo);
 	}
 
-	private Cargo buscarEmpresaPeloId(Long id) {
+	private Cargo buscarCargoPeloId(Long id) {
 		Cargo cargoSalvo = this.cargoRepository.findById(id)
 			      .orElseThrow(() -> new EmptyResultDataAccessException(1));
 		return cargoSalvo;

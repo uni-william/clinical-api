@@ -1,6 +1,7 @@
 package com.system.clinical.resource;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +28,8 @@ import com.system.clinical.model.input.CargoInput;
 import com.system.clinical.repository.CargoRepository;
 import com.system.clinical.service.CargoService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/cargos")
 public class CargoResource {
@@ -39,11 +42,19 @@ public class CargoResource {
 	private CargoService cargoService;
 	
 	@GetMapping
+	@ApiOperation(value = "Retorna cargos filtrados paginados")
 	public Page<Cargo> pesquisar(String descricao, Pageable pageable) {
 		return cargoRepository.filtrar(descricao, pageable);
 	}
+	
+	@GetMapping(value = "/listar")
+	@ApiOperation(value = "Retorna lista de cargos - ideal para dropbox")
+	public ResponseEntity<List<Cargo>> listar() {
+		return ResponseEntity.ok(cargoRepository.findAll());
+	}
 
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna cargo por id")
 	public ResponseEntity<Cargo> buscarPorId(@PathVariable Long id) {
 		Optional<Cargo> optional = cargoRepository.findById(id);
 		if (optional.isPresent())
@@ -53,6 +64,7 @@ public class CargoResource {
 	}
 
 	@PostMapping
+	@ApiOperation(value = "Cria um novo cargo")
 	public ResponseEntity<Cargo> novo(@Valid @RequestBody CargoInput cargo, HttpServletResponse response) {
 		Cargo cargoSalvo = cargoService.salvar(cargo);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(cargoSalvo.getId())
@@ -65,11 +77,13 @@ public class CargoResource {
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ApiOperation(value = "Exclui cargo por id")
 	public void remover(@PathVariable Long id) {
 		cargoRepository.deleteById(id);
 	}
 	
 	@PutMapping("/{id}")
+	@ApiOperation(value = "Atualizar dados de cargo")
 	public ResponseEntity<Cargo> atualizar(@PathVariable Long id, @Valid @RequestBody CargoInput cargo) {
 		Cargo cargoSalvo = cargoService.atualizar(id, cargo);
 		return ResponseEntity.ok(cargoSalvo);

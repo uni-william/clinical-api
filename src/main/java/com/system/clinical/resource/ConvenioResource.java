@@ -1,6 +1,7 @@
 package com.system.clinical.resource;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,8 @@ import com.system.clinical.repository.ConvenioRepository;
 import com.system.clinical.repository.filter.ConvenioFilter;
 import com.system.clinical.service.ConvenioService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/convenios")
 public class ConvenioResource {
@@ -40,11 +43,20 @@ public class ConvenioResource {
 	private ConvenioService convenioService;
 	
 	@GetMapping
+	@ApiOperation(value = "Retorna convênios filtrados paginados")
 	public Page<Convenio> pesquisar(ConvenioFilter filter, Pageable pageable) {
 		return convenioRepository.filtrar(filter, pageable);
 	}
+	
+	
+	@GetMapping(value = "/listarAtivos")
+	@ApiOperation(value = "Retorna lista de convênios ativos - ideal para dropbox")
+	public ResponseEntity<List<Convenio>> listarAtivos()  {
+		return ResponseEntity.ok(convenioRepository.findByStatusTrue());
+	}
 
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna convênio por id")
 	public ResponseEntity<Convenio> buscarPorId(@PathVariable Long id) {
 		Optional<Convenio> optional = convenioRepository.findById(id);
 		if (optional.isPresent())
@@ -54,6 +66,7 @@ public class ConvenioResource {
 	}
 
 	@PostMapping
+	@ApiOperation(value = "Cria um novo convênio")
 	public ResponseEntity<Convenio> novo(@Valid @RequestBody ConvenioInput convenio, HttpServletResponse response) {
 		Convenio convenioSalvo = convenioService.salvar(convenio);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(convenioSalvo.getId())
@@ -66,17 +79,20 @@ public class ConvenioResource {
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ApiOperation(value = "Exclui convênio por id")
 	public void remover(@PathVariable Long id) {
 		convenioRepository.deleteById(id);
 	}
 	
 	@PutMapping("/{id}")
+	@ApiOperation(value = "Atualizar dados de convênio")
 	public ResponseEntity<Convenio> atualizar(@PathVariable Long id, @Valid @RequestBody ConvenioInput convenio) {
 		Convenio convenioSalvo = convenioService.atualizar(id, convenio);
 		return ResponseEntity.ok(convenioSalvo);
 	}
 	
 	@PutMapping("/{id}/status")
+	@ApiOperation(value = "Atualizar status do convênio")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void atualizarStatus(@PathVariable Long id, @RequestBody Boolean status) {
 		convenioService.atualizarStatus(id, status);

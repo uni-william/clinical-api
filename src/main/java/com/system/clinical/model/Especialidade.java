@@ -18,18 +18,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "tb_cargo")
-public class Cargo {
+@Table(name = "tb_especialidade")
+public class Especialidade {
 	
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_cargo")
+	@Column(name = "id_especialidade")
 	private Long id;
 	
 	@NotNull
-	@Column(name = "dc_cargo", nullable = false, length = 50)
+	@Column(name = "dc_especialidade", nullable = false, length = 50)
 	private String descricao;
 
+	private Boolean status;
 
 }

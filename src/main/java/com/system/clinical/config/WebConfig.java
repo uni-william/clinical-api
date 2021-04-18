@@ -18,7 +18,7 @@ public class WebConfig {
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setMaxAge(3600L);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:4100"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://127.0.0.1:9100", "http://localhost:9100"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);

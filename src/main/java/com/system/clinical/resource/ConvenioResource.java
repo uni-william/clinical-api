@@ -86,7 +86,7 @@ public class ConvenioResource {
 	
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Atualizar dados de convênio")
-	public ResponseEntity<Convenio> atualizar(@PathVariable Long id, @Valid @RequestBody ConvenioInput convenio) {
+	public ResponseEntity<Convenio> atualizar(@PathVariable Long id, @Valid @RequestBody Convenio convenio) {
 		Convenio convenioSalvo = convenioService.atualizar(id, convenio);
 		return ResponseEntity.ok(convenioSalvo);
 	}

@@ -90,7 +90,7 @@ public class CargoResource {
 	
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Atualizar dados de cargo")
-	public ResponseEntity<Cargo> atualizar(@PathVariable Long id, @Valid @RequestBody CargoInput cargo) {
+	public ResponseEntity<Cargo> atualizar(@PathVariable Long id, @Valid @RequestBody Cargo cargo) {
 		Cargo cargoSalvo = cargoService.atualizar(id, cargo);
 		return ResponseEntity.ok(cargoSalvo);
 	}	

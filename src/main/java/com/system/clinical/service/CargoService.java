@@ -24,8 +24,7 @@ public class CargoService {
 		return cargoRepository.save(cargo);
 	}
 	
-	public Cargo atualizar(Long id, CargoInput cargoInput) {
-		Cargo cargo = toEntity(cargoInput);
+	public Cargo atualizar(Long id, Cargo cargo) {
 		Cargo cargoSalvo = buscarCargoPeloId(id);
 		BeanUtils.copyProperties(cargo, cargoSalvo, "id");
 		return cargoRepository.save(cargoSalvo);

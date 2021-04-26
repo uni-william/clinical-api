@@ -32,10 +32,9 @@ public class ConvenioService {
 		return convenioRepository.save(convenio);
 	}
 	
-	public Convenio atualizar(Long id, ConvenioInput convenioInput) {
-		Convenio convenio = toEntity(convenioInput);
+	public Convenio atualizar(Long id, Convenio convenio) {
 		Convenio convenioSalvo = buscarConvenioPeloId(id);
-		Convenio converioPorCnpj = convenioRepository.findByCnpj(convenioInput.getCnpj());
+		Convenio converioPorCnpj = convenioRepository.findByCnpj(convenio.getCnpj());
 		if (converioPorCnpj != null && !convenioSalvo.equals(converioPorCnpj))
 			throw new NegocioException("Cnpj já cadastrado para outro convênio");
 		BeanUtils.copyProperties(convenio, convenioSalvo, "id");

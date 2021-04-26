@@ -25,8 +25,7 @@ public class EspecialidadeService {
 		return especialidadeRepository.save(especialidade);
 	}
 	
-	public Especialidade atualizar(Long id, EspecialidadeInput especialidadeInput) {
-		Especialidade especialidade = toEntity(especialidadeInput);
+	public Especialidade atualizar(Long id, Especialidade especialidade) {
 		Especialidade especialidadeSalvo = buscarEspecialidadePeloId(id);
 		BeanUtils.copyProperties(especialidade, especialidadeSalvo, "id");
 		return especialidadeRepository.save(especialidadeSalvo);

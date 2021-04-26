@@ -85,7 +85,7 @@ public class EspecialidadeResource {
 	
 	@PutMapping("/{id}")
 	@ApiOperation(value = "Atualizar dados de especialidade")
-	public ResponseEntity<Especialidade> atualizar(@PathVariable Long id, @Valid @RequestBody EspecialidadeInput especialidade) {
+	public ResponseEntity<Especialidade> atualizar(@PathVariable Long id, @Valid @RequestBody Especialidade especialidade) {
 		Especialidade especialidadeSalvo = especialidadeService.atualizar(id, especialidade);
 		return ResponseEntity.ok(especialidadeSalvo);
 	}

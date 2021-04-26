@@ -34,6 +34,18 @@ public class CargoRepositoryImpl implements CargoRepositoryQuery {
 		return new PageImpl<>(query.getResultList(), pageable, total(descricao));
 	}
 	
+
+	@Override
+	public List<Cargo> listaFiltrada(String descricao) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Cargo> criteriaQuery = builder.createQuery(Cargo.class);	
+		Root<Cargo> root = criteriaQuery.from(Cargo.class);
+		Predicate[] predicates = criarRestricoes(descricao, builder, root);
+		criteriaQuery.where(predicates);
+		TypedQuery<Cargo> query = manager.createQuery(criteriaQuery);
+		return query.getResultList();
+	}
+	
 	
 	private Predicate[] criarRestricoes(String descricao, CriteriaBuilder builder, Root<Cargo> root) {		
 		List<Predicate> predicates = new ArrayList<>();	
@@ -59,5 +71,7 @@ public class CargoRepositoryImpl implements CargoRepositoryQuery {
 		criteriaQuery.select(builder.count(root));
 		return manager.createQuery(criteriaQuery).getSingleResult();
 	}
+
+
 
 }

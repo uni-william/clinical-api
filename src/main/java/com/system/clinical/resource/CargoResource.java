@@ -52,6 +52,12 @@ public class CargoResource {
 	public ResponseEntity<List<Cargo>> listar() {
 		return ResponseEntity.ok(cargoRepository.findAll());
 	}
+	
+	@GetMapping(value = "/listarNaoPaginada")
+	@ApiOperation(value = "Retorna lista de cargos não paginada")
+	public ResponseEntity<List<Cargo>> listaFiltrada(String descricao) {
+		return ResponseEntity.ok(cargoRepository.listaFiltrada(descricao));
+	}	
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "Retorna cargo por id")

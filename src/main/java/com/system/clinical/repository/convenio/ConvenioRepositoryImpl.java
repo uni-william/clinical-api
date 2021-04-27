@@ -35,7 +35,17 @@ public class ConvenioRepositoryImpl implements ConvenioRepositoryQuery {
 		return new PageImpl<>(query.getResultList(), pageable, total(filter));
 	}
 	
+	@Override
+	public List<Convenio> listaFiltrada(ConvenioFilter filter) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Convenio> criteriaQuery = builder.createQuery(Convenio.class);	
+		Root<Convenio> root = criteriaQuery.from(Convenio.class);
+		Predicate[] predicates = criarRestricoes(filter, builder, root);
+		criteriaQuery.where(predicates);
+		TypedQuery<Convenio> query = manager.createQuery(criteriaQuery);
+		return query.getResultList();
 	
+	}
 	private Predicate[] criarRestricoes(ConvenioFilter filter, CriteriaBuilder builder, Root<Convenio> root) {		
 		List<Predicate> predicates = new ArrayList<>();	
 		if (filter.getNome() != null)
@@ -64,5 +74,6 @@ public class ConvenioRepositoryImpl implements ConvenioRepositoryQuery {
 		criteriaQuery.select(builder.count(root));
 		return manager.createQuery(criteriaQuery).getSingleResult();
 	}
+
 
 }

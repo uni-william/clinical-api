@@ -54,6 +54,12 @@ public class ConvenioResource {
 	public ResponseEntity<List<Convenio>> listarAtivos()  {
 		return ResponseEntity.ok(convenioRepository.findByStatusTrue());
 	}
+	
+	@GetMapping(value = "/listarNaoPaginada")
+	@ApiOperation(value = "Retorna lista de convênios não paginada")
+	public ResponseEntity<List<Convenio>> listaFiltrada(ConvenioFilter filter) {
+		return ResponseEntity.ok(convenioRepository.listaFiltrada(filter));
+	}
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "Retorna convênio por id")
